@@ -1,43 +1,81 @@
 #include <stdio.h>
+#include <string.h>
 
-// Desafio Super Trunfo - Países
-// Tema 2 - Comparação das Cartas
-// Este código inicial serve como base para o desenvolvimento do sistema de comparação de cartas de cidades. 
-// Siga os comentários para implementar cada parte do desafio.
+// Estrutura para representar uma carta de país
+typedef struct {
+    char nome[50];
+    int populacao;
+    int area;
+    int pib;
+    int densidade_demografica;
+} Carta;
 
-int main() {
-    // Definição das variáveis para armazenar as propriedades das cidades
-    // Você pode utilizar o código do primeiro desafio
-
+// Função para exibir o menu de atributos e obter a escolha do usuário
+int escolherAtributo(int excluido) {
+    int escolha;
+    printf("\nEscolha um atributo para comparar:\n");
+    if (excluido != 1) printf("1 - População\n");
+    if (excluido != 2) printf("2 - Área\n");
+    if (excluido != 3) printf("3 - PIB\n");
+    if (excluido != 4) printf("4 - Densidade Demográfica\n");
+    printf("Escolha: ");
+    scanf("%d", &escolha);
     
-    // Cadastro das Cartas:
-    // Implemente a lógica para solicitar ao usuário que insira os dados das cidades
-    // utilizando a função scanf para capturar as entradas.
-    // utilize o código do primeiro desafio
+    // Valida se a escolha é válida
+    if (escolha < 1 || escolha > 4 || escolha == excluido) {
+        printf("Opção inválida. Tente novamente.\n");
+        return escolherAtributo(excluido);
+    }
+    return escolha;
+}
 
-    // Exemplo:
-    // printf("Digite o código da cidade: ");
-    // scanf("%s", codigo);
-    // 
-    // (Repita para cada propriedade)
+// Função para obter o valor do atributo
+int obterValorAtributo(Carta carta, int atributo) {
+    switch (atributo) {
+        case 1: return carta.populacao;
+        case 2: return carta.area;
+        case 3: return carta.pib;
+        case 4: return carta.densidade_demografica;
+        default: return 0;
+    }
+}
 
-    // Comparação de Cartas:
-    // Desenvolva a lógica de comparação entre duas cartas.
-    // Utilize estruturas de decisão como if, if-else para comparar atributos como população, área, PIB, etc.
+// Função para comparar dois atributos
+int compararAtributo(int valor1, int valor2, int atributo) {
+    return (atributo == 4) ? (valor1 < valor2) : (valor1 > valor2);
+}
 
-    // Exemplo:
-    // if (populacaoA > populacaoB) {
-    //     printf("Cidade 1 tem maior população.\n");
-    // } else {
-    //     printf("Cidade 2 tem maior população.\n");
-    // }
+// Função principal
+int main() {
+    // Cartas pré-definidas
+    Carta carta1 = {"Brasil", 211000000, 8515767, 2200000, 25};
+    Carta carta2 = {"Argentina", 45000000, 2780000, 500000, 16};
 
-    // Exibição dos Resultados:
-    // Após realizar as comparações, exiba os resultados para o usuário.
-    // Certifique-se de que o sistema mostre claramente qual carta venceu e com base em qual atributo.
-
-    // Exemplo:
-    // printf("A cidade vencedora é: %s\n", cidadeVencedora);
-
+    printf("Comparando %s vs %s\n", carta1.nome, carta2.nome);
+    
+    // Escolha dos dois atributos
+    int atributo1 = escolherAtributo(0);
+    int atributo2 = escolherAtributo(atributo1);
+    
+    // Obter valores
+    int valor1A = obterValorAtributo(carta1, atributo1);
+    int valor2A = obterValorAtributo(carta2, atributo1);
+    int valor1B = obterValorAtributo(carta1, atributo2);
+    int valor2B = obterValorAtributo(carta2, atributo2);
+    
+    // Soma total
+    int soma1 = valor1A + valor1B;
+    int soma2 = valor2A + valor2B;
+    
+    // Exibir resultados
+    printf("\nResultados:\n");
+    printf("%s - %d (%d) e %d (%d) - Total: %d\n", carta1.nome, valor1A, atributo1, valor1B, atributo2, soma1);
+    printf("%s - %d (%d) e %d (%d) - Total: %d\n", carta2.nome, valor2A, atributo1, valor2B, atributo2, soma2);
+    
+    // Determinar vencedor
+    if (soma1 > soma2) printf("%s venceu!\n", carta1.nome);
+    else if (soma2 > soma1) printf("%s venceu!\n", carta2.nome);
+    else printf("Empate!\n");
+    
     return 0;
 }
